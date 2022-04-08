@@ -3420,9 +3420,9 @@ def generarNota(Cod_Soc,TipFact,Año,tipo_de_comprobante, serie, numero, sunat_t
 #--------------------------------Programa N° 13 - ERP_Anulación Despacho----------------------------------
 
 def CargarDetalleAnulacion(self, tbw, sql, dict_serie, dict_lote):
-    tbw.clearContents()
     informacion=consultarSql(sql)
     if informacion!=[]:
+        tbw.clearContents()
         rows=tbw.rowCount()
         for r in range(rows):
             tbw.removeRow(0)
@@ -3431,7 +3431,7 @@ def CargarDetalleAnulacion(self, tbw, sql, dict_serie, dict_lote):
         for fila in informacion:
             # Cant_Restante=float(fila[4])-float(fila[5])
             fila[4]=formatearDecimal(fila[4],'3')
-            fila[5]=formatearDecimal(fila[5],'3')
+            # fila[5]=formatearDecimal(fila[5],'3')
 
             col=0
             for i in fila:
@@ -3440,11 +3440,11 @@ def CargarDetalleAnulacion(self, tbw, sql, dict_serie, dict_lote):
                     btSerie=QPushButton(tbw)
                     if tbw.rowCount()<=row:
                         tbw.insertRow(tbw.rowCount())
-                    tbw.setCellWidget(row, col+7, btSerie)
+                    tbw.setCellWidget(row, col+5, btSerie)
 
                     if serie == '1': ## Si control de series
                         cargarIcono(btSerie,'activar')
-                        btSerie.clicked.connect(self.SeriePosicion)
+                        # btSerie.clicked.connect(self.SeriePosicion)
                     else:
                         cargarIcono(btSerie,'cerrar')
 
@@ -3459,13 +3459,13 @@ def CargarDetalleAnulacion(self, tbw, sql, dict_serie, dict_lote):
                     if lote == '1': ## Si maneja Lote
                         lote = ''
                         info2 = QTableWidgetItem(lote)
-                        tbw.setItem(row, col+6, info2)
+                        tbw.setItem(row, col+4, info2)
                     else:
                         lote = "---"
                         info2 = QTableWidgetItem(lote)
                         info2.setFlags(flags)
                         info2.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-                        tbw.setItem(row, col+6, info2)
+                        tbw.setItem(row, col+4, info2)
 
                 item=QTableWidgetItem(i)
                 item.setFlags(flags)

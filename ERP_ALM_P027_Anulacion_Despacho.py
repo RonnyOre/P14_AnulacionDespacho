@@ -503,7 +503,8 @@ class Anulacion_Despacho(QMainWindow):
         sqlDetalle='''SELECT a.Item_Doc_Alm,a.Cod_Mat,b.Descrip_Mat,b.Uni_Base,a.Cant_Salida
         FROM TAB_ALM_002_Detalle_Mov_Almacenes a
         LEFT JOIN TAB_MAT_001_Catalogo_Materiales b ON a.Cod_Mat=b.Cod_Mat
-        WHERE a.Cod_Emp='%s' AND a.Nro_Doc_Alm='%s' AND a.Fecha_Doc_Alm='%s' AND a.Tipo_Doc_Alm='02' AND a.Tipo_Mov='601';'''%(Cod_Soc,NroDocSalida,FechaDocSalida)
+        WHERE a.Cod_Emp='%s' AND a.Nro_Doc_Alm='%s' AND a.Fecha_Doc_Alm='%s' AND a.Tipo_Doc_Alm='02' AND a.Tipo_Mov='601'
+        ORDER BY CAST(a.Item_Doc_Alm as INT) ASC;'''%(Cod_Soc,NroDocSalida,FechaDocSalida)
         CargarDetalleAnulacion(self, self.tbwDespacho_Venta, sqlDetalle, dict_serie, dict_lote)
 
     def chkMontacargaSi(self):
@@ -513,8 +514,6 @@ class Anulacion_Despacho(QMainWindow):
     def chkMontacargaNo(self):
         if self.chkMontacarga_No.isChecked():
             self.chkMontacarga_Si.setChecked(False)
-
-
 
         # print(dict_serie)
         # print(dict_lote)
@@ -676,47 +675,47 @@ class Anulacion_Despacho(QMainWindow):
     #         mensajeDialogo("error", "Error", "No se ha dado Salida de Series a uno o mas materiales")
     #         print(e)
     #
-    # def Grabar(self):
-    #     resultado=mensajeDialogo("pregunta", "Grabar Despacho", "¿Seguro que desea grabar el despacho?\n\nUna vez grabado no se podrá modificar el documento")
-    #     if resultado=='Yes':
-    #         try:
-    #             Hora = datetime.now().strftime('%H:%M:%S.%f')
-    #             Año_Doc=Año
-    #             Fecha_Doc=formatearFecha(self.leFecha_Doc.text())
-    #             Tipo_Mov='601'
-    #             Nro_Pedido=self.leNro_Pedido.text()
-    #             Fecha_Pedido=formatearFecha(self.leFecha_Pedido.text())
-    #             Planta=Cod_Planta
-    #             Almacen=Cod_Almacen
-    #             Cliente=self.leCliente.text()
-    #             Representante=self.leRepresentante.text()
-    #             Nro_Contenedor=self.leNro_Contenedor.text()
-    #             Hora_Inicio_Carga=self.leHora_Inicio_Carga.text()
-    #             Hora_Salida=self.leHora_Salida.text()
-    #
-    #             # montacarga = self.leMontacarga.text() ## debe ser QCheckBox
-    #             if self.chkMontacarga_Si.isChecked():
-    #                 Montacarga = '1' ## Si Montacarga
-    #                 print("Si Montacarga")
-    #             else:
-    #                 Montacarga = '2' ## No Montacarga
-    #                 print("No Montacarga")
-    #
-    #             try:
-    #                 if (texto_cabecera != "") and (texto_cabecera != None):
-    #                     print("++++++++++++++++++++++++")
-    #                     print(texto_cabecera)
-    #                     Texto_Cab = '1'
-    #                 else:
-    #                     Texto_Cab = '2'
-    #             except:
-    #                 Texto_Cab = '2'
-    #
-    #             sqlCodActualDoc="SELECT Cod_Actual FROM TAB_SOC_018_Rango_de_Números_de_Documentos_de_procesos WHERE Cod_Soc='%s' AND Tipo_Rango='06' AND Año_Rango='%s'"%(Cod_Soc,Año)
-    #             CodActualDoc=convlist(sqlCodActualDoc)
-    #             self.leNro_Doc.setText(CodActualDoc[0])
-    #             Nro_Doc=self.leNro_Doc.text()
-    #             Tipo_Doc='02'
+    def Grabar(self):
+        resultado=mensajeDialogo("pregunta", "Anular Despacho", "¿Seguro que desea anular el despacho?\n\nUna vez anulado no se podrá revertir la acción")
+        if resultado=='Yes':
+            try:
+                Hora = datetime.now().strftime('%H:%M:%S.%f')
+                Año_Doc=Año
+                Fecha_Doc=formatearFecha(self.leFecha_Doc.text())
+                Tipo_Mov='602'
+                Nro_Pedido=self.leNro_Pedido.text()
+                Fecha_Pedido=formatearFecha(self.leFecha_Pedido.text())
+                Planta=Cod_Planta
+                Almacen=Cod_Almacen
+                Cliente=self.leCliente.text()
+                Representante=self.leRepresentante.text()
+                Nro_Contenedor=self.leNro_Contenedor.text()
+                Hora_Inicio_Carga=self.leHora_Inicio_Carga.text()
+                Hora_Salida=self.leHora_Salida.text()
+
+                # montacarga = self.leMontacarga.text() ## debe ser QCheckBox
+                if self.chkMontacarga_Si.isChecked():
+                    Montacarga = '1' ## Si Montacarga
+                    print("Si Montacarga")
+                else:
+                    Montacarga = '2' ## No Montacarga
+                    print("No Montacarga")
+
+                try:
+                    if (texto_cabecera != "") and (texto_cabecera != None):
+                        print("++++++++++++++++++++++++")
+                        print(texto_cabecera)
+                        Texto_Cab = '1'
+                    else:
+                        Texto_Cab = '2'
+                except:
+                    Texto_Cab = '2'
+
+                sqlCodActualDoc="SELECT Cod_Actual FROM TAB_SOC_018_Rango_de_Números_de_Documentos_de_procesos WHERE Cod_Soc='%s' AND Tipo_Rango='06' AND Año_Rango='%s'"%(Cod_Soc,Año)
+                CodActualDoc=convlist(sqlCodActualDoc)
+                self.leNro_Doc.setText(CodActualDoc[0])
+                Nro_Doc=self.leNro_Doc.text()
+                Tipo_Doc='02'
     #
     #             sqlCab='''INSERT INTO TAB_ALM_001_Mov_Almacenes(Cod_Emp, Año_Doc_Alm, Nro_Doc_Alm, Tipo_Doc_Alm, Tipo_Mov, Fecha_Doc_Alm, Referencia, Fecha_Referencia, Cliente, Representante_Cliente, Nro_Contenedor, Hora_Inicio_Descarga, Hora_Fin_Descarga, Uso_Montacarga, Texto_Cabecera, Fecha_Reg, Hora_Reg, Usuario_Reg)
     #             VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')''' %(Cod_Soc,Año_Doc,Nro_Doc,Tipo_Doc,Tipo_Mov,Fecha_Doc,Nro_Pedido,Fecha_Pedido,Cod_Cliente,Representante,Nro_Contenedor,Hora_Inicio_Carga,Hora_Salida, Montacarga,Texto_Cab,Fecha,Hora,Cod_Usuario)
@@ -815,11 +814,11 @@ class Anulacion_Despacho(QMainWindow):
     #             elif respuesta['respuesta']=='incorrecto':
     #                 mensajeDialogo("error", "Error", "No se pudo grabar, verifique y vuelva a intentar")
     #
-    #         except Exception as e:
-    #             mensajeDialogo("error", "Error", "No se pudo grabar, verifique y vuelva a intentar")
-    #             exc_type, exc_obj, exc_tb = sys.exc_info()
-    #             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-    #             print(fname, exc_tb.tb_lineno, exc_type, e)
+            except Exception as e:
+                mensajeDialogo("error", "Error", "No se pudo anular, verifique y vuelva a intentar")
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(fname, exc_tb.tb_lineno, exc_type, e)
     #
     # def actualizarStock(self, Cod_Soc, Planta, Almacen, Cod_Mat, Cant_Salida, stocks, Hora):
     #     try:
